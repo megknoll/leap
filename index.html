@@ -13,7 +13,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Leap Motion JavaScript Sample</title>
 <script src="assets/js/leap-0.6.0.min.js"></script>
-<script src="http://code.jquery.com/jquery-latest.min.js"type="text/javascript"></script>
+<script src="assets/js/jquery-latest.min.js"type="text/javascript"></script>
 
 <script>
 
@@ -28,8 +28,8 @@ var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 
 // That's how you define the value of a pixel //
 function drawPixel (x, y, r, g, b, a) {
-    var index = (x + y * canvasWidth) * 4;
-    console.log('Drawing:'+ x + ' '+ y);
+    var index = (Math.floor(x) + Math.floor(y) * canvasWidth) * 4;
+    console.log('Drawing:'+ Math.floor(x) + ' '+ Math.floor(y));
     canvasData.data[index + 0] = r;
     canvasData.data[index + 1] = g;
     canvasData.data[index + 2] = b;
