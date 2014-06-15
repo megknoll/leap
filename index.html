@@ -25,23 +25,17 @@ var canvasWidth = canvas.width;
 var canvasHeight = canvas.height;
 var ctx = canvas.getContext("2d");
 var canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+var canvasXOffset = 400;
 
 // That's how you define the value of a pixel //
-function drawPixel (x, y, r, g, b, a) {
-    var index = (Math.floor(x) + Math.floor(y) * canvasWidth) * 4;
-    console.log('Drawing:'+ Math.floor(x) + ' '+ Math.floor(y));
-    canvasData.data[index + 0] = r;
-    canvasData.data[index + 1] = g;
-    canvasData.data[index + 2] = b;
-    canvasData.data[index + 3] = a;
+function drawPixel (x, y, hex) {
+    var adjustedX = (Math.floor(x) - 400)*(-1);
+    var adjustedY = (Math.floor(y)-500)*(-1);
+    console.log('Drawing:'+ adjustedY + ' '+ Math.floor(y));
+    ctx.fillStyle=hex;
+    ctx.fillRect(adjustedX,adjustedY,3,3);
 }
 
-// That's how you update the canvas, so that your //
-// modification are taken in consideration //
-function updateCanvas() {
-    ctx.putImageData(canvasData, 0, 0);
-    console.log('updating canvas');
-}
 
 // Store frame for motion functions
 var previousFrame = null;
@@ -99,8 +93,8 @@ Leap.loop(controllerOptions, function(frame) {
       handString += "Sphere center: " + vectorToString(hand.sphereCenter) + " mm<br />";
       handString += "Sphere radius: " + hand.sphereRadius.toFixed(1) + " mm<br />";
 
-      drawPixel(hand.palmPosition[0], hand.palmPosition[1], 255, 0, 0, 255);
-      updateCanvas();
+      //drawPixel(hand.palmPosition[0], hand.palmPosition[1], 255, 0, 0, 255);
+      
       // Hand motion factors
       if (previousFrame && previousFrame.valid) {
         var translation = hand.translation(previousFrame);
@@ -171,6 +165,8 @@ Leap.loop(controllerOptions, function(frame) {
       pointableString += "Tip velocity: " + vectorToString(pointable.tipVelocity) + " mm/s<br />";
 
       pointableString += "</div>";
+      drawPixel(pointable.tipPosition[0], pointable.tipPosition[1], "FF0000");
+      drawPixel(0, 0, "000000");
     }
   }
   else {
@@ -261,7 +257,7 @@ function pauseForGestures() {
 <body>
 <h1>Leap Motion Hello World</h1>
 
-<canvas id="canvasPlotter" width="500" height="500"></canvas>
+<canvas id="canvasPlotter" width="800" height="500"></canvas>
 
 <div id="main">
   <button id="pause" onclick="togglePause()">Pause</button>
